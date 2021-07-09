@@ -1,5 +1,5 @@
 {
-  "name": "USINSA",
+  "name": "usinsa",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -10,6 +10,7 @@
   "dependencies": {
     "core-js": "^3.6.5",
     "eslint-plugin-vuetify": "^1.0.1",
+    "firebase": "^8.7.0",
     "vue": "^2.6.11",
     "vue-fullpage.js": "^0.1.7",
     "vue-router": "^3.2.0",
