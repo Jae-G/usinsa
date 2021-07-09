@@ -19,7 +19,19 @@
         </h2>
       </v-btn>
 
-      <v-spacer />
+      <v-tabs
+        :value="tabIdx"
+        optional
+        dark
+        hide-slider
+      >
+        <!-- <v-tab>
+          NEW
+        </v-tab>
+        <v-tab>
+          정장
+        </v-tab> -->
+      </v-tabs>
 
       <v-btn
         v-ripple="false"
@@ -37,20 +49,6 @@
         회원가입
       </v-btn>
     </v-app-bar>
-    <v-tabs
-      :value="tabIdx"
-      centered
-      optional
-      color="black"
-      app
-    >
-      <v-tab>
-        NEW
-      </v-tab>
-      <v-tab>
-        정장
-      </v-tab>
-    </v-tabs>
   </v-card>
 </template>
 
