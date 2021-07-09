@@ -4,6 +4,14 @@
     max-width="374"
     flat
   >
+    <v-card-title
+      primary-title
+      class="justify-center mb-15"
+    >
+      <h1>
+        로그인
+      </h1>
+    </v-card-title>
     <v-text-field
       outlined
       label="이메일"
