@@ -4,6 +4,14 @@
     max-width="374"
     flat
   >
+    <v-card-title
+      primary-title
+      class="justify-center mb-15"
+    >
+      <h1>
+        회원가입
+      </h1>
+    </v-card-title>
     <v-form>
       <v-text-field
         v-model="email"
