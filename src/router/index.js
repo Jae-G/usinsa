@@ -5,6 +5,7 @@ const MainPage = () => import('@/pages/MainPage.vue')
 const Main = () => import('@/views/Main.vue')
 const SignIn = () => import('@/views/sign/SignIn')
 const SignUp = () => import('@/views/sign/SignUp')
+const ProductDetail = () => import ('@/views/product/productDetail')
 
 
 Vue.use(VueRouter)
@@ -16,18 +17,27 @@ const routes = [
     children : [
       {
         path: '/',
+        name: 'home',
         component: Main
       },
       {
         path: '/sign-in',
+        name: 'signIn',
         component: SignIn
       },
       {
         path: '/sign-up',
+        name: 'signUp',
         component: SignUp,
+      },
+      {
+        path: '/product/:id',
+        name: 'product',
+        component : ProductDetail
       }
-    ]
+    ],
   },
+
 ]
 
 const router = new VueRouter({
