@@ -40,7 +40,7 @@ export default {
   },
   props:{
     productCodeChild:{
-      type:String,
+      type:Number,
       required: true,
     },
     productNameChild:{
@@ -48,7 +48,7 @@ export default {
       required: true,
     },
     productPriceChild:{
-      type:String,
+      type:Number,
       required: true,
     },
     productImagePathChild:{
@@ -62,12 +62,10 @@ export default {
   },
   methods : {
     moveProductPage() {
-
       this.$router.push(
         { path: `/product/${this.productCodeChild}`,
           query: { productCode: this.productCodeChild  }
         })
-
     }
   }
 
