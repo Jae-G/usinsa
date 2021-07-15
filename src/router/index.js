@@ -2,7 +2,8 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 
 const MainPage = () => import('@/pages/MainPage.vue')
-const Main = () => import('@/views/Main.vue')
+const AuthPage = () => import('@/pages/AuthPage.vue')
+const ProductPage = () => import('@/pages/ProductPage.vue')
 const SignIn = () => import('@/views/sign/SignIn')
 const SignUp = () => import('@/views/sign/SignUp')
 const ProductDetail = () => import ('@/views/product/productDetail')
@@ -14,29 +15,32 @@ const routes = [
   {
     path: '/',
     component: MainPage,
+  },
+  {
+    path: '/auth/',
+    component : AuthPage,
     children : [
       {
-        path: '/',
-        name: 'home',
-        component: Main
+        path: 'sign-in',
+        component : SignIn
       },
       {
-        path: '/sign-in',
-        name: 'signIn',
-        component: SignIn
-      },
-      {
-        path: '/sign-up',
-        name: 'signUp',
-        component: SignUp,
-      },
+        path: 'sign-up',
+        component : SignUp
+      }
+    ]
+  },
+  {
+    path: '/product/',
+    component : ProductPage,
+    children : [
       {
         path: '/product/:id',
         name: 'product',
         component : ProductDetail
       }
-    ],
-  },
+    ]
+  }
 
 ]
 
