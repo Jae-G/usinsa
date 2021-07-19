@@ -45,45 +45,49 @@
               class="mt-5"
             >
               <v-select
-                v-model="selectSize"
+                v-model="selectedSize"
                 :items="size"
                 label="사이즈"
                 outlined
                 dense
+                @change="addItem(selectedSize)"
               />
 
-              <template v-if="selectSize !== ''">
-                <v-divider class="mb-4" />
+              <div
+                v-for="item in selectItems"
+                :key="item.size"
+              >
                 <v-row>
                   <v-col cols="2">
-                    {{ selectSize }}
+                    {{ item.productSize }}
                   </v-col>
+                </v-row>
+                <v-row>
                   <v-col
-                    cols="5"
-                    align="center"
+                    cols="6"
                   >
                     <button
                       type="button"
-                      @click="decreaseCnt"
+                      @click="item.cnt > 1 ? item.cnt-- : item"
                     >
                       -
                     </button>
                     <input
-                      v-model="cnt"
+                      v-model="item.cnt"
                       type="text"
                     >
                     <button
                       type="button"
-                      @click="increaseCnt"
+                      @click="item.cnt++"
                     >
                       +
                     </button>
                   </v-col>
                   <v-col
-                    cols="3"
+                    cols="4"
                     align="end"
                   >
-                    {{ productInfo.productPrice * cnt | comma }} 원
+                    {{ productInfo.productPrice * item.cnt | comma }} 원
                   </v-col>
                   <v-col
                     cols="2"
@@ -92,35 +96,59 @@
                     <button
                       id="deleteButton"
                       type="button"
-                      @click="deleteItem"
+                      @click="deleteItem(item.productSize)"
                     >
                       X
                     </button>
                   </v-col>
                 </v-row>
-              </template>
+                <v-divider
+                  class="my-4"
+                />
+              </div>
+              <v-row>
+                <v-col>
+                  <h3>총 주문금액</h3>
+                </v-col>
+                <v-col align="end">
+                  {{ getSumPrice | comma }} 원
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                  md="7"
+                  sm="6"
+                  xs="6"
+                >
+                  <v-btn
+                    color="primary"
+                    block
+                  >
+                    구매
+                  </v-btn>
+                </v-col>
+                <v-col
+                  md="5"
+                  sm="6"
+                  xs="6"
+                  align="end"
+                >
+                  <v-btn
+                    color="white"
+                    class="ml-1"
+                  >
+                    <v-icon>mdi-basket-outline</v-icon>
+                  </v-btn>
+                  <v-btn color="white">
+                    <v-icon>mdi-heart-outline</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-card>
           </v-card-text>
 
           <v-card-actions>
-            <v-row>
-              <v-col>
-                <v-btn
-                  color="light"
-                  block
-                >
-                  장바구니
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  color="success"
-                  block
-                >
-                  구매
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-container />
           </v-card-actions>
         </v-card>
       </v-col>
@@ -140,8 +168,20 @@ export default {
     productInfo : [],
     cnt : 1,
     size : [],
-    selectSize : '',
+    selectedSize : '',
+    selectItems : [],
+    sumPrice : 0,
   }),
+  computed : {
+    getSumPrice: function() {
+      let sumCnt = 0;
+      this.selectItems.forEach(item => {
+        sumCnt += item.cnt
+      })
+
+      return this.productInfo.productPrice * sumCnt
+    }
+  },
 
   created() {
     this.getProductData()
@@ -153,24 +193,37 @@ export default {
         let response = await this.$axios.get(process.env.VUE_APP_FIREBASE_URL + 'product/' + this.$route.params.id + '.json')
         this.productInfo = response.data
         this.size = this.productInfo.size.replaceAll("'","").split(",")
-        console.log(this.size)
-
       } catch (err) {
         console.log(err)
       }
     },
-    increaseCnt() {
-      this.cnt++
+    deleteItem(size) {
+      // 삭제할 아이템 인덱스 찾기
+      let delItemIdx= this.selectItems.findIndex(item => item.productSize === size)
+      this.selectItems.splice(delItemIdx,1)
     },
-    decreaseCnt() {
-      if (this.cnt > 1) {
-        this.cnt--
-      }
-    },
-    deleteItem() {
-      this.selectSize = ''
+    addItem(size) {
+      let isDuplicate = false
+
+      // 구매 예정 상품중에 중복된 사이즈 있는지 찾기
+      this.selectItems.filter(item => {
+        if (item.productSize === size) {
+          isDuplicate = true
+        }
+      })
+
+      if (isDuplicate === false)
+        this.selectItems
+          .push({
+            productSize : size,
+            productCode : this.productInfo.productCode,
+            cnt : 1
+          })
+      console.log(this.selectItems)
+
     }
-  }
+  },
+
 }
 </script>
 
@@ -190,7 +243,7 @@ button {
   background-color: #f1f2f4;
   width: 34px;
   border: solid #eff1f5;
-  border-width: 1px;
+  border-width: 1.5px;
 }
 #deleteButton {
   background-color: #ffffff;
@@ -199,7 +252,7 @@ button {
 input {
   width: 44px;
   border: solid #eff1f5;
-  border-width: 1px;
+  border-width: 1.5px;
   text-align: center;
 }
 

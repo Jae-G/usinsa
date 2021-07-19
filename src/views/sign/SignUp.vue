@@ -85,7 +85,7 @@ export default {
           .auth()
           .createUserWithEmailAndPassword(this.email, this.pwd)
           .then(() => {
-            alert('회원가입이 완료되어있습니다.')
+            alert('회원가입이 완료되었습니다.')
             this.$router.push('/')
           })
           .catch(err => {

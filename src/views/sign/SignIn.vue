@@ -60,8 +60,9 @@ export default {
           .auth()
           .signInWithEmailAndPassword(this.email,this.pwd )
           .then((res) => {
-            this.$store.dispatch('setUserInfo',res.user.email,res.user.l)
-            this.$router.push('/')
+            this.$store.dispatch('setUserEmail',res.user.email)
+            this.$store.dispatch('setUserToken',res.user.uid)
+            this.$router.replace('/')
           })
           .catch((err) => {
             console.log(err)

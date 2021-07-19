@@ -17,9 +17,10 @@ export default new Vuex.Store({
     }
   },
   actions: {
-    async setUserInfo(context,email,token) {
-      console.log(context)
+    setUserEmail(context,email) {
       context.commit('SET_CURRENT_EMAIL',email)
+    },
+    setUserToken(context,token) {
       context.commit('SET_CURRENT_TOKEN',token)
     }
   },

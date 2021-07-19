@@ -1,18 +1,82 @@
 <template>
   <v-app>
-    <Header />
-    <v-main>
-      <router-view />
-    </v-main>
+    <v-carousel
+      hide-delimiter-background
+      show-arrows
+      height="850"
+      :cycle="true"
+    >
+      <Header />
+      <v-carousel-item
+        v-for="(midBanner,i) in midBannerInfo"
+        :key="i"
+        :src="midBanner.imagePath"
+      />
+    </v-carousel>
+
+    <v-container class="mx-auto my-12">
+      <v-card flat>
+        <v-card-title
+          primary-title
+          class="justify-center pb-12"
+        >
+          <h2>제품</h2>
+        </v-card-title>
+        <v-row>
+          <v-col
+            v-for="product in productsInfo"
+            :key="product.productCode"
+            lg="3"
+            md="4"
+            sm="6"
+            xs="12"
+          >
+            <Product
+              :product-code-child="product.productCode"
+              :product-name-child="product.productName"
+              :product-price-child="product.productPrice"
+              :product-image-path-child="product.productImagePath"
+              :product-like-child="product.productLike"
+            />
+          </v-col>
+        </v-row>
+      </v-card>
+    </v-container>
   </v-app>
 </template>
 
 <script>
-import Header from '@/views/frame/Header'
+import Product from '@/components/product'
+import Header from '@/views/frame/MainPageHeader'
 export default {
   components : {
-    Header
-  }
+    Product,Header
+  },
+
+  data : () => ({
+    midBannerInfo: [],
+    productsInfo: [],
+  }),
+  created(){
+    this.getMainData()
+  },
+  methods : {
+    async getMainData() {
+      try {
+        let response
+        //상품 데이터 가져오기
+        response = await this.$axios.get(process.env.VUE_APP_FIREBASE_URL + 'product.json')
+        this.productsInfo = response.data.filter((product) => product.useYn === 'y')
+        //중앙 배너 이미지 가져오기
+        response = await this.$axios.get(process.env.VUE_APP_FIREBASE_URL + 'mid-banner.json')
+        this.midBannerInfo = response.data.filter((product) => product.useYn === 'y')
+      } catch (err) {
+        console.log(err)
+      }
+    },
+
+  },
+
 }
 </script>
 
