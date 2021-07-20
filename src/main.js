@@ -8,7 +8,7 @@ import axios from 'axios'
 import firebase from 'firebase'
 
 const firebaseConfig = {
-  apiKey: process.env.VUE_APP_FIREBASE_URL,
+  apiKey: process.env.VUE_APP_FIREBASE_API_KEY,
   authDomain: "usinsa-4be58.firebaseapp.com",
   databaseURL: "https://usinsa-4be58-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "usinsa-4be58",
