@@ -5,7 +5,7 @@
         cols="12"
         md="6"
       >
-        <v-card class="">
+        <v-card>
           <v-img
             :src="productInfo.productImagePath"
           />
@@ -23,7 +23,7 @@
           <v-card-text>
             <dl>
               <dt>판매가</dt>
-              <dd> {{ productInfo.productPrice | comma }}원</dd>
+              <dd> {{ productInfo.productPrice.length !== 0 && productInfo.productPrice | comma }}원</dd>
             </dl>
             <dl>
               <dt>브랜드</dt>
@@ -35,7 +35,8 @@
                 <v-icon color="red">
                   mdi-heart
                 </v-icon>
-                {{ productInfo.productLike | comma }}
+                <!-- {{ productInfo.productLike.length !== 0 ? (productInfo.productLike | comma) : '' }} -->
+                {{ productInfo.productLike.length !== 0 && productInfo.productLike | comma }}
               </dd>
             </dl>
 
@@ -68,7 +69,7 @@
                   >
                     <button
                       type="button"
-                      @click="item.cnt > 1 ? item.cnt-- : item"
+                      @click="item.cnt > 1 && item.cnt--"
                     >
                       -
                     </button>
@@ -121,8 +122,10 @@
                   xs="6"
                 >
                   <v-btn
-                    color="primary"
+                    class="white--text"
+                    color="black"
                     block
+                    @click="moveOrderPage"
                   >
                     구매
                   </v-btn>
@@ -139,17 +142,16 @@
                   >
                     <v-icon>mdi-basket-outline</v-icon>
                   </v-btn>
-                  <v-btn color="white">
+                  <v-btn
+                    class="ml-2"
+                    color="white"
+                  >
                     <v-icon>mdi-heart-outline</v-icon>
                   </v-btn>
                 </v-col>
               </v-row>
             </v-card>
           </v-card-text>
-
-          <v-card-actions>
-            <v-container />
-          </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
@@ -171,6 +173,7 @@ export default {
     selectedSize : '',
     selectItems : [],
     sumPrice : 0,
+    isLoading : false
   }),
   computed : {
     getSumPrice: function() {
@@ -178,7 +181,6 @@ export default {
       this.selectItems.forEach(item => {
         sumCnt += item.cnt
       })
-
       return this.productInfo.productPrice * sumCnt
     }
   },
@@ -193,6 +195,7 @@ export default {
         let response = await this.$axios.get(process.env.VUE_APP_FIREBASE_URL + 'product/' + this.$route.params.id + '.json')
         this.productInfo = response.data
         this.size = this.productInfo.size.replaceAll("'","").split(",")
+        this.isLoading = true
       } catch (err) {
         console.log(err)
       }
@@ -220,8 +223,13 @@ export default {
             cnt : 1
           })
       console.log(this.selectItems)
-
+    },
+    moveOrderPage() {
+      this.$router.push(
+        { path: `/order/${this.productInfo.productCode}`})
     }
+
+
   },
 
 }
