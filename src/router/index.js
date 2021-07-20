@@ -4,9 +4,12 @@ import VueRouter from 'vue-router'
 const MainPage = () => import('@/pages/MainPage.vue')
 const AuthPage = () => import('@/pages/AuthPage.vue')
 const ProductPage = () => import('@/pages/ProductPage.vue')
+const OrderPage = () => import('@/pages/OrderPage.vue')
 const SignIn = () => import('@/views/sign/SignIn')
 const SignUp = () => import('@/views/sign/SignUp')
 const ProductDetail = () => import ('@/views/product/productDetail')
+const OrderDetail = () => import ('@/views/order/orderDetail')
+
 
 
 Vue.use(VueRouter)
@@ -36,8 +39,17 @@ const routes = [
     children : [
       {
         path: '/product/:id',
-        name: 'product',
         component : ProductDetail
+      }
+    ]
+  },
+  {
+    path: '/order/',
+    component : OrderPage,
+    children : [
+      {
+        path: '/order/:id',
+        component : OrderDetail
       }
     ]
   }
