@@ -1,7 +1,11 @@
 export default {
   methods : {
     moveToPage_mixin(path) {
-      this.$router.replace(path)
+      if (this.$route.fullPath === path) {
+        this.$router.go(this.$router.currentRoute)
+      }else{
+        this.$router.replace(path)
+      }
     }
   }
 }
