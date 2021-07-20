@@ -63,9 +63,7 @@ export default {
   methods : {
     moveProductPage() {
       this.$router.push(
-        { path: `/product/${this.productCodeChild}`,
-          query: { productCode: this.productCodeChild  }
-        })
+        { path: `/product/${this.productCodeChild}`})
     }
   }
 
