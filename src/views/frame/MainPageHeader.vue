@@ -21,7 +21,7 @@
 
     <v-spacer />
 
-    <v-toolbar-items v-if="!isLogin">
+    <v-toolbar-items v-if="isLogin === false">
       <v-btn
         v-ripple="false"
         color="transparent"
@@ -39,7 +39,7 @@
       </v-btn>
     </v-toolbar-items>
 
-    <v-toolbar-items v-else>
+    <v-toolbar-items v-else-if="isLogin === true">
       <v-btn
         v-ripple="false"
         color="transparent"
@@ -51,7 +51,7 @@
         v-ripple="false"
         color="transparent"
         class="elevation-0 black--text"
-        href="/"
+        @click="signOut()"
       >
         <h3>로그아웃</h3>
       </v-btn>
@@ -73,7 +73,8 @@ export default {
   }),
   created() {
     window.addEventListener("scroll",this.getScrollVal)
-    this.chkToken()
+    // this.chkToken()
+    this.chkSignIn()
   },
   methods : {
     getScrollVal() {
@@ -84,21 +85,26 @@ export default {
     },
     chkToken() {
       firebase.auth().onAuthStateChanged((user) => {
-        if (this.$store.state.token === user.uid){
+        if (this.$store.getters.getToken === user.uid){
           this.isLogin = true
-          console.log("true")
         }
         else {
           this.isLogin = false
-          console.log("false")
         }
       })
+    },
+    chkSignIn() {
+      if (this.$store.getters.getToken.length > 0)
+        this.isLogin = true
+      else
+        this.isLogin = false
     },
     signOut() {
       firebase.auth().signOut().then(() => {
         this.$store.dispatch('setUserEmail','')
         this.$store.dispatch('setUserToken','')
         this.isLogin = false
+        this.$router.go(this.$router.currentRoute)
       }).catch(err => {
 
       })
